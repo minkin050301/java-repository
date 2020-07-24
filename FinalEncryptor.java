@@ -4,6 +4,49 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class FinalEncryptor {
+	
+    public static void main(String[] args) {
+        String mode = "enc";
+        String alg = "shift";
+        String data = "";
+        String in = null;
+        String out = null;
+        int key = 0;
+
+        for (int i = 0; i < args.length; i++) {
+            if ("-mode".equals(args[i])) {
+                mode = args[i + 1];
+            } else if ("-key".equals(args[i])) {
+                key = Integer.parseInt(args[i + 1]);
+            } else if ("-data".equals(args[i])) {
+                data = args[i + 1];
+            } else if ("-in".equals(args[i])) {
+                in = args[i + 1];
+            } else if ("-out".equals(args[i])) {
+                out = args[i + 1];
+            } else if ("-alg".equals(args[i])) {
+                alg = args[i + 1];
+            }
+        }
+
+        String message;
+        EncryptorDecryptor encryptorDecryptor = new EncryptorDecryptor(alg, mode);
+
+        if (!"".equals(data) || in == null) {
+            message = data;
+        } else {
+            message = readFromFile(in);
+
+        }
+        
+        String processedMessage = encryptorDecryptor.processMessage(message, key);
+        if (out != null) {
+            writeToFile(out, processedMessage);
+        } else {
+            System.out.println(processedMessage);
+        }
+    }
+
     public static String readFromFile(String fileName) {
         File inputFile = new File(fileName);
         try (Scanner scanner = new Scanner(inputFile)) {
@@ -136,47 +179,5 @@ class ShiftAlgorithm implements EncryptionAlgorithm {
             }
         }
         return decryptedMessage;
-    }
-
-    public static void main(String[] args) {
-        String mode = "enc";
-        String alg = "shift";
-        String data = "";
-        String in = null;
-        String out = null;
-        int key = 0;
-
-        for (int i = 0; i < args.length; i++) {
-            if ("-mode".equals(args[i])) {
-                mode = args[i + 1];
-            } else if ("-key".equals(args[i])) {
-                key = Integer.parseInt(args[i + 1]);
-            } else if ("-data".equals(args[i])) {
-                data = args[i + 1];
-            } else if ("-in".equals(args[i])) {
-                in = args[i + 1];
-            } else if ("-out".equals(args[i])) {
-                out = args[i + 1];
-            } else if ("-alg".equals(args[i])) {
-                alg = args[i + 1];
-            }
-        }
-
-        String message;
-        EncryptorDecryptor encryptorDecryptor = new EncryptorDecryptor(alg, mode);
-
-        if (!"".equals(data) || in == null) {
-            message = data;
-        } else {
-            message = readFromFile(in);
-
-        }
-        
-        String processedMessage = encryptorDecryptor.processMessage(message, key);
-        if (out != null) {
-            writeToFile(out, processedMessage);
-        } else {
-            System.out.println(processedMessage);
-        }
     }
 }
