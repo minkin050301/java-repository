@@ -36,7 +36,6 @@ public class FinalEncryptor {
             message = data;
         } else {
             message = readFromFile(in);
-
         }
         
         String processedMessage = encryptorDecryptor.processMessage(message, key);
